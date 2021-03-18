@@ -22,21 +22,51 @@ class List extends PureComponent {
         "id": 4,
         "todo": "Goto sleep"
       }
-    ]
+    ],
+    isEdit: false
   }
 
-  todoList = this.state.todos.map(todo => {
+  deleteTodo = (id) => {
+    let todos = this.state.todos.filter(elem => { return elem.id !== id });
+    this.setState({
+      todos: todos
+    });
+  }
+
+  newTodo = () => {
     return (
-      <Item todo={todo} />
-    )
-  });
+      <div className="row">
+        <div className="col-12">
+          <input type="text" id="todo" />
+        </div>
+      </div>
+    );
+  }
+
+  addTodo = () => {
+    this.setState({
+      isEdit: true
+    })
+  }
 
   render() {
     return (
       <div className="ListWrapper">
+        { this.state.isEdit ? this.newTodo() : ''}
         <div className="row">
           <div className="col-12">
-            {this.todoList}
+            <div className="pull-right" onClick={() => this.addTodo()}>
+              <button>
+                <i className="fa fa-plus"></i>
+              </button>
+            </div>
+          </div>
+          <div className="col-12">
+            {this.state.todos.map(todo => {
+              return (
+                <Item todo={todo} key={todo.id} deleteTodo={this.deleteTodo} />
+              )
+            })}
           </div>
         </div>
       </div>
